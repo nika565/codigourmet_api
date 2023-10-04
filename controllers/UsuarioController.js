@@ -27,6 +27,11 @@ const UsuarioController = {
     // Método para excluir usuário.
     apagar: async (req, res) => {
 
+    },
+
+    // Processo para favoritar receitas salvando o ID delas em um array
+    receitasFavoritas: async (req, res) => {
+
     }
 
 }
