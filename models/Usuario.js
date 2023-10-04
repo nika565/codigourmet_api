@@ -24,6 +24,10 @@ const usuarioSchema = new Schema({
     senha: {
         type: String,
         required: true,
+    },
+
+    receitasFavoritas:{
+        type:[String], //Array de strings que representa os id das receitas favoritas do usuário.
     }
 
 });

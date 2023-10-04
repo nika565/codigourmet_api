@@ -5,6 +5,35 @@ const { Schema } = mongoose;
 // Craindo o model do banco de dados
 const receitasSchema = new Schema({
 
+    nome: {
+        type: String,
+        required: true
+    },
+
+    ingredientes: {
+        type: [String]
+    },
+
+    modoPreparo: {
+        type: String,
+        required: true
+    },
+
+    custo:{
+        type : Number,
+        required: true
+    },
+
+    tempo: {
+        type: Number,
+        required: true
+    },
+
+    categoria: {
+        type: [String],
+        required: true
+    }
+
 });
 
 const Receitas = mongoose.model('Receitas', receitasSchema);
