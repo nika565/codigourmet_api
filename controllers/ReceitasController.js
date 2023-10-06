@@ -39,18 +39,6 @@ const ReceitasController = {
 
     },
 
-    // Buscar todas as receitas favoritas do usuário
-    buscarReceitasFavoritas: async (req, res) => {
-
-        try {
-            
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ msg: `Algo deu errado...`, status: `error` })
-        }
-
-    },
-
     // Editar uma receita
     editarReceita: async (req, res) => {
 
