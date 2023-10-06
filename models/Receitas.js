@@ -10,6 +10,11 @@ const receitasSchema = new Schema({
         required: true
     },
 
+    idCriador: {
+        type: String,
+        required: true
+    },
+
     ingredientes: {
         type: [String]
     },
@@ -30,7 +35,12 @@ const receitasSchema = new Schema({
     },
 
     categoria: {
-        type: [String],
+        type: String,
+        required: true
+    },
+
+    data: {
+        type: String,
         required: true
     }
 
