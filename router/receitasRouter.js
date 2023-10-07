@@ -8,6 +8,9 @@ const receitas = new ReceitasController();
 // Rota para criar receita
 roteadorReceitas.route('/receitas').post((req, res) => receitas.criar(req, res));
 
+// Rota para buscar as últimas receitas públicadas
+roteadorReceitas.route('/receitas').get((req, res) => receitas.receitas(req, res));
+
 // Rota para buscar uma receitas
 roteadorReceitas.route('/receitas/:id').get((req, res) => receitas.buscarReceita(req, res));
 
@@ -16,3 +19,5 @@ roteadorReceitas.route('/receitas/:id').put((req, res) => receitas.editarReceita
 
 // Rota para excluir uma receita
 roteadorReceitas.route('/receitas/:id').delete((req, res) => receitas.apagarReceita(req, res));
+
+module.exports = roteadorReceitas;

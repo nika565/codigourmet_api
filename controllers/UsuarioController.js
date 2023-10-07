@@ -213,8 +213,8 @@ class UsuarioController {
                 { _id: id },
                 { $push: { receitasFavoritas: novoValor } },
                 { new: true } // Isso retorna o documento atualizado
-              );
-            
+            );
+
 
             if (!resultado) {
                 return res.status(404).json({ msg: `Não foi possível favoritar a receita.`, status: `error` })
@@ -228,6 +228,30 @@ class UsuarioController {
         }
 
     }
+
+    // Processo de romever uma receita de "Favoritos"
+    async desfavoritarReceitas(req, res) {
+        try {
+            const id = req.params.id;
+            const receitaId = req.body.receitaId;
+
+            const resultado = await UsuarioModel.findOneAndUpdate(
+                { _id: id },
+                { $pull: { receitasFavoritas: receitaId } }, // Usando $pull para remover a receita favorita
+                { new: true } // Isso retorna o documento atualizado
+            );
+
+            if (!resultado) {
+                return res.status(404).json({ msg: `Não foi possível desfavoritar a receita.`, status: `error` });
+            }
+
+            return res.status(200).json({ msg: `OK`, status: `success`, dados: resultado.receitasFavoritas });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ msg: `Algo deu errado...`, status: `error` });
+        }
+    }
+
 
 }
 
