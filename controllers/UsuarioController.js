@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 // Model para realizar os processos no banco de dados
 const UsuarioModel = require('../models/Usuario');
+const ReceitasModel = require('../models/Receitas');
 
 // Importando validações
 const Criptografia = require('../validators/criptografia');
@@ -89,7 +90,8 @@ class UsuarioController {
                 id: buscar._id,
                 nome: buscar.nome,
                 sobrenome: buscar.sobrenome,
-                email: buscar.email
+                email: buscar.email,
+                receitasFavoritas: buscar.receitasFavoritas
             }
 
             return res.status(200).json({ msg: `OK`, status: `success`, dados: dados })
@@ -236,13 +238,15 @@ class UsuarioController {
 
             const id = req.params.id;
 
-            const receitas = await UsuarioModel.find({ _id: id }, 'receitasFavoritas');
+            const dados = await UsuarioModel.findOne({ _id: id }, 'receitasFavoritas');
 
-            if (receitas.length === 0) {
+            if (dados.length === 0) {
                 return res.status(404).json({ msg: `Nenhuma receita encontrada.`, status: `error` })
             }
 
-            return res.status(200).json({ msg: `OK`, status: `success`, dados: receitas });
+            const receitasFavoritas = await consultaReceitasFavoritas(dados.receitasFavoritas);
+
+            return res.status(200).json({ msg: `OK`, status: `success`, receitasFavoritas});
 
         } catch (error) {
             console.log(error);
@@ -258,9 +262,14 @@ class UsuarioController {
 
             const id = req.params.id;
 
+            const receita = req.body.receita;
+
+            // Verificando se a receita já está favoritada
+
+            // inserindo a receita na lista de favoritas
             const resultado = await UsuarioModel.findOneAndUpdate(
                 { _id: id },
-                { $push: { receitasFavoritas: novoValor } },
+                { $push: { receitasFavoritas: receita } },
                 { new: true } // Isso retorna o documento atualizado
             );
 
@@ -301,6 +310,32 @@ class UsuarioController {
         }
     }
 
+
+}
+
+// Funçção para buscar a lista de receitas favoritas
+async function consultaReceitasFavoritas(array) {
+
+    try {
+
+        const arrayReceitas = [];
+
+        for (let id of array) {
+
+            let receita = await ReceitasModel.findById(id);
+
+            arrayReceitas.push(receita);
+            
+        }
+
+        console.log(arrayReceitas);
+
+        return arrayReceitas;
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ msg: `Algo deu errado...`, status: `error` })
+    }
 
 }
 

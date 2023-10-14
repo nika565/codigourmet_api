@@ -16,7 +16,7 @@ const receitasSchema = new Schema({
     },
 
     ingredientes: {
-        type: [String]
+        type: String
     },
 
     modoPreparo: {

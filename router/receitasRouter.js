@@ -14,7 +14,7 @@ roteadorReceitas.route('/receitas').post(autenticacao, (req, res) => receitas.cr
 // Rota para buscar as últimas receitas públicadas
 roteadorReceitas.route('/receitas').get(autenticacao, (req, res) => receitas.receitas(req, res));
 
-// Rota para buscar uma receitas
+// Rota para buscar uma receita
 roteadorReceitas.route('/receitas/:id').get(autenticacao, (req, res) => receitas.buscarReceita(req, res));
 
 // Rota para editar uma receita
