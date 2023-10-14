@@ -1,3 +1,6 @@
+// Autenticação
+const autenticacao = require('../middlewares/autenticacao');
+
 // Usando o roteador do express para configurar as rotas do usuário para CRUD
 const roteadorUsuarios = require('express').Router();
 
@@ -9,13 +12,13 @@ const usuario = new UsuarioController();
 roteadorUsuarios.route('/usuarios').post((req, res) => usuario.criar(req, res));
 
 // Rota para buscar dados do usuário
-roteadorUsuarios.route('/usuarios/:id').get((req, res) => usuario.buscarUsuario(req, res));
+roteadorUsuarios.route('/usuarios/:id').get(autenticacao, (req, res) => usuario.buscarUsuario(req, res));
 
 // Rota para editar usuário
-roteadorUsuarios.route('/usuarios/:id').put((req, res) => usuario.editar(req, res));
+roteadorUsuarios.route('/usuarios/:id').put(autenticacao, (req, res) => usuario.editar(req, res));
 
 // Rota para excluir usuário
-roteadorUsuarios.route('/usuarios/:id').delete((req, res) => usuario.apagar(req, res));
+roteadorUsuarios.route('/usuarios/:id').delete(autenticacao, (req, res) => usuario.apagar(req, res));
 
 
 module.exports = roteadorUsuarios;

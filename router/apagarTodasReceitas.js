@@ -1,3 +1,6 @@
+// Autenticação
+const autenticacao = require('../middlewares/autenticacao');
+
 // Roteador para pagra todas as receitas
 const roteadorApagar = require('express').Router();
 
@@ -6,6 +9,6 @@ const ReceitasController = require('../controllers/ReceitasController');
 const receitas = new ReceitasController();
 
 // Rota para apagar todas as receitas
-roteadorApagar.route('/apagartudo/:id').delete((req, res) => receitas.apagarTodasReceitas(req, res));
+roteadorApagar.route('/apagartudo/:id').delete(autenticacao, (req, res) => receitas.apagarTodasReceitas(req, res));
 
 module.exports = roteadorApagar;

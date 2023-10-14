@@ -1,3 +1,6 @@
+// Importanddo o JWT para gerar o token do login
+const jwt = require('jsonwebtoken');
+
 // Model para realizar os processos no banco de dados
 const UsuarioModel = require('../models/Usuario');
 
@@ -103,6 +106,15 @@ class UsuarioController {
 
         try {
 
+            // Validações
+            if (!req.body.email) {
+                return res.status(400).json({ msg: `O email é obrigatório.` })
+            }
+
+            if (!req.body.senha) {
+                return res.status(400).json({ msg: `O senha é obrigatório.` })
+            }
+
             const email = req.body.email;
 
             // Verificando a existência do email
@@ -114,16 +126,32 @@ class UsuarioController {
 
                 if (senha) {
 
-                    // Dados para voltar no front-end
-                    const dados = {
-                        id: verificacao._id,
-                        nome: verificacao.nome,
-                        sobrenome: verificacao.sobrenome,
-                        email: verificacao.email,
-                        receitasFavoritas: verificacao.receitasFavoritas
+                    // Gerando o token do login
+                    try {
+
+                        const secret = process.env.SECRET;
+
+                        const token = jwt.sign({
+                            id: verificacao._id
+                        }, secret);
+
+                        // Dados para voltar no front-end
+                        const dados = {
+                            id: verificacao._id,
+                            nome: verificacao.nome,
+                            sobrenome: verificacao.sobrenome,
+                            email: verificacao.email,
+                            receitasFavoritas: verificacao.receitasFavoritas
+                        }
+
+                        res.status(200).json({ msg: `Bem-vindo(a) ${dados.nome}`, status: `success`, dados: dados, token })
+
+
+                    } catch (error) {
+                        console.log(error);
+                        res.status(500).json({ msg: `Aconteceu algum erro no servidor.`, status: `error` })
                     }
 
-                    res.status(200).json({ msg: `Bem-vindo(a) ${dados.nome}`, status: `success`, dados: dados })
 
                 } else {
                     res.status(404).json({ msg: `Usuário não encontrado.`, status: `error` });
@@ -156,7 +184,7 @@ class UsuarioController {
             if (!validarNome(req.body.nome)) res.status(400).json({ msg: `Campo de nome inválido.`, status: `error` })
             if (!validarNome(req.body.sobrenome)) res.status(400).json({ msg: `Campo de sobrenome inválido.`, status: `error` })
 
-            
+
             // dados a serem alterados
             const usuario = {
                 nome: req.body.nome,
@@ -166,7 +194,7 @@ class UsuarioController {
             const edicao = await UsuarioModel.findByIdAndUpdate(id, usuario);
 
             if (edicao) {
-                return res.status(200).json({ msg: `Usuário editado com sucesso!`, status: `success`});
+                return res.status(200).json({ msg: `Usuário editado com sucesso!`, status: `success` });
             }
 
             return res.status(400).json({ msg: `Não foi possível editar dados do usuário.`, status: `error` });
