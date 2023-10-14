@@ -8,7 +8,9 @@ class Criptografia {
 
         try {
 
-            const hash = await bcrypt.hash(senha, 10);
+            const salt = await bcrypt.genSalt(12);
+
+            const hash = await bcrypt.hash(senha, salt);
 
             return hash;
             

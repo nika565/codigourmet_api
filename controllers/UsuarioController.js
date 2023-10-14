@@ -1,9 +1,14 @@
 // Model para realizar os processos no banco de dados
 const UsuarioModel = require('../models/Usuario');
 
-// Importando minha classe de criptografia
-const Criptografia = require('./validators/criptografia');
+// Importando validações
+const Criptografia = require('../validators/criptografia');
+const ValidacaoEmail = require('../validators/validacaoEmail');
+const validarSenha = require('../validators/validacaoSenha');
+const validarNome = require('../validators/validacaoNome');
 
+// Instânciando validações
+const validarEmail = new ValidacaoEmail();
 const criptografia = new Criptografia();
 
 // Objeto do usuário que contém os métodos pra realizar as operações no banco de dados
@@ -13,6 +18,24 @@ class UsuarioController {
     async criar(req, res) {
 
         try {
+
+            // Validando campos vázios
+            if (!req.body.nome) return res.status(400).json({ msg: `Campo de nome não pode estar vázio.`, status: `error` });
+            if (!req.body.sobrenome) return res.status(400).json({ msg: `Campo de sobrenome não pode estar vázio.`, status: `error` });
+            if (!req.body.email) return res.status(400).json({ msg: `Campo de email não pode estar vázio.`, status: `error` });
+            if (!req.body.senha) return res.status(400).json({ msg: `Campo de senha não pode estar vázio.`, status: `error` });
+
+            // Validações de nome e sobrenome
+            if (!validarNome(req.body.nome)) return res.status(400).json({ msg: `Campo de nome inválido.`, status: `error` })
+            if (!validarNome(req.body.sobrenome)) return res.status(400).json({ msg: `Campo de sobrenome inválido.`, status: `error` })
+
+            // Validação de email
+            if (validarEmail.tamanho(req.body.email)) return res.status(400).json({ msg: `O e-mail digitado ultrapassou o limite de 300 caracteres.`, status: `error` });
+            if (!validarEmail.validacao(req.body.email)) return res.status(400).json({ msg: `E-mail inválido.`, status: `error` });
+            if (await validarEmail.duplicado(req.body.email)) return res.status(400).json({ msg: `O email já existente, por favor digite outro email.`, status: 'error' });
+
+            // Validação de senha
+            if (!validarSenha(req.body.senha)) return res.status(400).json({ msg: `A senha está no formato incorreto. A senha deve ter entre 6 e 14 caracteres, deve possuir uma letra maiúscula, deve possuir uma letra minúscula, um número e um símbolo.`, status: 'error' });
 
             // Criptografando a senha
             const senha = await criptografia.senhaCriptografada(req.body.senha);
@@ -30,18 +53,8 @@ class UsuarioController {
 
             // Verificando a resposta
             if (criar) {
-
-                // Dados a serem devolvidos para o cliente
-                const dados = {
-                    id: criar._id,
-                    nome: criar.nome,
-                    sobrenome: criar.sobrenome,
-                    email: criar.email,
-                    receitasFavoritas: criar.receitasFavoritas
-                }
-
                 // Resposta enviada ao front-end
-                res.status(201).json({ msg: `Usuário cadastrado com sucesso!`, status: `success`, dados: dados });
+                res.status(201).json({ msg: `Usuário cadastrado com sucesso!`, status: `success` });
 
             } else {
                 res.status(400).json({ msg: `Não foi possível cadastrar o usuário`, status: `error` })
@@ -135,17 +148,25 @@ class UsuarioController {
             // Pegando o id do usuário pela url
             const id = req.params.id;
 
+            // Validando campos vázios
+            if (!req.body.nome) return res.status(400).json({ msg: `Campo de nome não pode estar vázio.`, status: `error` });
+            if (!req.body.sobrenome) return res.status(400).json({ msg: `Campo de sobrenome não pode estar vázio.`, status: `error` });
+
+            // Validações de nome e sobrenome
+            if (!validarNome(req.body.nome)) res.status(400).json({ msg: `Campo de nome inválido.`, status: `error` })
+            if (!validarNome(req.body.sobrenome)) res.status(400).json({ msg: `Campo de sobrenome inválido.`, status: `error` })
+
+            
             // dados a serem alterados
             const usuario = {
                 nome: req.body.nome,
                 sobrenome: req.body.sobrenome,
-                email: req.body.email
             }
 
             const edicao = await UsuarioModel.findByIdAndUpdate(id, usuario);
 
             if (edicao) {
-                return res.status(200).json({ msg: `Usuário editado com sucesso!`, status: `success`, dados: edicao });
+                return res.status(200).json({ msg: `Usuário editado com sucesso!`, status: `success`});
             }
 
             return res.status(400).json({ msg: `Não foi possível editar dados do usuário.`, status: `error` });

@@ -24,18 +24,8 @@ const receitasSchema = new Schema({
         required: true
     },
 
-    custo:{
-        type : Number,
-        required: true
-    },
-
     tempo: {
         type: Number,
-        required: true
-    },
-
-    categoria: {
-        type: String,
         required: true
     },
 

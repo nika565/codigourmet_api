@@ -20,9 +20,7 @@ class ReceitasController {
                 idCriador: req.body.idCriador,
                 ingredientes: req.body.ingredientes,
                 modoPreparo: req.body.modoPreparo,
-                custo: req.body.custo,
                 tempo: req.body.tempo,
-                categoria: req.body.categoria,
                 data: data
             }
 
@@ -98,9 +96,7 @@ class ReceitasController {
                 idCriador: req.body.idCriador,
                 ingredientes: req.body.ingredientes,
                 modoPreparo: req.body.modoPreparo,
-                custo: req.body.custo,
                 tempo: req.body.tempo,
-                categoria: req.body.categoria
             }
 
             const edicao = await ReceitasModel.findByIdAndUpdate(idReceita, receita);
