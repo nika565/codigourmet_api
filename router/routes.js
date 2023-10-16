@@ -7,6 +7,7 @@ const roteadorFavoritos = require('./receitasFavoritas');
 const roteadorApagar = require('./apagarTodasReceitas');
 const roteadorUsuarios = require('./usuarioRouter');
 const roteadorLogin = require('./loginRouter');
+const roteadorMinhasReceitas = require('./minhasReceitas');
 
 // Testando a rota raiz
 roteador.route('/').get((req, res) => res.send(JSON.stringify({id: '0809', teste: "Olá mundo!!!"})));
@@ -21,5 +22,6 @@ roteador.use('/usuarios', roteadorLogin);
 roteador.use('/', roteadorReceitas);
 roteador.use('/receitas', roteadorFavoritos);
 roteador.use('/receitas', roteadorApagar);
+roteador.use('/receitas', roteadorMinhasReceitas);
 
 module.exports = roteador;

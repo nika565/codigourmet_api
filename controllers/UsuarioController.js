@@ -246,7 +246,7 @@ class UsuarioController {
 
             const receitasFavoritas = await consultaReceitasFavoritas(dados.receitasFavoritas);
 
-            return res.status(200).json({ msg: `OK`, status: `success`, receitasFavoritas});
+            return res.status(200).json({ msg: `OK`, status: `success`, receitasFavoritas });
 
         } catch (error) {
             console.log(error);
@@ -310,6 +310,27 @@ class UsuarioController {
         }
     }
 
+    // Buscar as minhas receitas
+    async minhasReceitas(req, res) {
+
+        try {
+
+            // Buscando as receitas criadas pelo usuário, é nescessário o ID do mesmo.
+            const id = req.params.id;
+
+            const dados = ReceitasModel.find({idCriador: id});
+
+            if(!dados) return res.status(404).json({msg: `Nenhuma receita encontrada.`, status: `error`});
+
+            return res.status(200).json({msg: `Sucesso!`, status: `success`, dados: dados})
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({msg: `Erro no servidor! Tente novamente mais tarde.`, status: `error`})
+        }
+
+    }
+
 
 }
 
@@ -325,7 +346,7 @@ async function consultaReceitasFavoritas(array) {
             let receita = await ReceitasModel.findById(id);
 
             arrayReceitas.push(receita);
-            
+
         }
 
         console.log(arrayReceitas);
