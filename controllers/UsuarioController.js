@@ -1,5 +1,6 @@
 // Importanddo o JWT para gerar o token do login
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 // Model para realizar os processos no banco de dados
 const UsuarioModel = require('../models/Usuario');
@@ -146,7 +147,7 @@ class UsuarioController {
                             receitasFavoritas: verificacao.receitasFavoritas
                         }
 
-                        res.status(200).json({ msg: `Bem-vindo(a) ${dados.nome}`, status: `success`, dados: dados, token })
+                        return res.status(200).json({ msg: `Bem-vindo(a) ${dados.nome}`, status: `success`, dados: dados, token })
 
 
                     } catch (error) {
