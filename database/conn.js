@@ -1,6 +1,6 @@
 // Usando o dotenv para pegar minha string de conexão
 require('dotenv').config();
-const stringConn = process.env.stringConn;
+const stringConn = process.env.STRINGCONN;
 
 // Mongoose para se conectar e realizar as oprações no banco
 const mongoose = require('mongoose');
