@@ -319,7 +319,7 @@ class UsuarioController {
             // Buscando as receitas criadas pelo usuário, é nescessário o ID do mesmo.
             const id = req.params.id;
 
-            const dados = ReceitasModel.find({idCriador: id});
+            const dados = await ReceitasModel.find({idCriador: id});
 
             if(!dados) return res.status(404).json({msg: `Nenhuma receita encontrada.`, status: `error`});
 
