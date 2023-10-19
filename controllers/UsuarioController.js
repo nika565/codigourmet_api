@@ -1,6 +1,7 @@
 // Importanddo o JWT para gerar o token do login
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 // Model para realizar os processos no banco de dados
 const UsuarioModel = require('../models/Usuario');
@@ -157,7 +158,7 @@ class UsuarioController {
 
 
                 } else {
-                    res.status(404).json({ msg: `Usuário não encontrado.`, status: `error` });
+                    res.status(400).json({ msg: `Email ou senha inválidos.`, status: `error` });
                 }
 
             } else {
@@ -319,17 +320,94 @@ class UsuarioController {
             // Buscando as receitas criadas pelo usuário, é nescessário o ID do mesmo.
             const id = req.params.id;
 
-            const dados = await ReceitasModel.find({idCriador: id});
+            const dados = await ReceitasModel.find({ idCriador: id });
 
-            if(!dados) return res.status(404).json({msg: `Nenhuma receita encontrada.`, status: `error`});
+            if (!dados) return res.status(404).json({ msg: `Nenhuma receita encontrada.`, status: `error` });
 
-            return res.status(200).json({msg: `Sucesso!`, status: `success`, dados: dados})
+            return res.status(200).json({ msg: `Sucesso!`, status: `success`, dados: dados })
 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({msg: `Erro no servidor! Tente novamente mais tarde.`, status: `error`})
+            return res.status(500).json({ msg: `Erro no servidor! Tente novamente mais tarde.`, status: `error` })
         }
 
+    }
+
+    // Envio de email para recuperar a senha
+    async emailRecuperar(req, res) {
+
+        try {
+
+            // Pegando o email mandado na url
+            const email = req.body.email
+
+            const dados = await UsuarioModel.findOne({email: email});
+
+            console.log(dados);
+
+            if (!dados) {
+                return res.status(404).json({msg: `Usuário não encontrado!`, status: `error`});
+            } 
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    type: 'OAuth2',
+                    user: process.env.MAIL_USERNAME,
+                    pass: process.env.MAIL_PASSWORD,
+                    clientId: process.env.OAUTH_CLIENTID,
+                    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+                    refreshToken: process.env.OAUTH_REFRESH_TOKEN
+                }
+            });
+
+            let mailOptions = {
+                from: 'tomerpacific@gmail.com',
+                to: `${email}`,
+                subject: 'Recuperação de senha.',
+                text: `Olá ${dados.nome}, aqui está o seu código para recuperar a senha: ${dados._id}`
+            };
+
+            try {
+                const info = await transporter.sendMail(mailOptions);
+                console.log('E-mail enviado com sucesso!', info.response);
+                return res.status(200).json({ msg: `E-mail enviado! confira sua caixa de emails.`, status: `success` });
+            } catch (error) {
+                console.error('Erro ao enviar o e-mail:', error);
+                return res.status(500).json({ msg: `Erro ao enviar o e-mail.`, status: `error` });
+            }
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ msg: `Algo deu errado no servidor! Tente novamente mais tarde.`, status: `error` });
+        }
+
+    }
+
+    async recuperarSenha(req, res) {
+        try {
+
+            const id = req.params.id;
+
+            // Criptografando a senha
+            const senha = await criptografia.senhaCriptografada(req.body.senha);
+
+            const usuario = {
+                senha: senha
+            }
+
+            const alterarSenha = await UsuarioModel.findByIdAndUpdate(id, usuario);
+
+            if (!alterarSenha) {
+                return res.status(400).json({msg: `Não foi possível alterar a senha.`, status: `error`});
+            } else {
+                return res.status(200).json({msg: `Senha alterada com sucesso`, status: `success`})
+            }
+
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ msg: `Algo deu errado, tente novamente mais tarde!`, status: `error` })
+        }
     }
 
 
