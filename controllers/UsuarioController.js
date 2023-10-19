@@ -343,8 +343,6 @@ class UsuarioController {
 
             const dados = await UsuarioModel.findOne({email: email});
 
-            console.log(dados);
-
             if (!dados) {
                 return res.status(404).json({msg: `Usuário não encontrado!`, status: `error`});
             } 
@@ -387,6 +385,9 @@ class UsuarioController {
         try {
 
             const id = req.params.id;
+
+            // Validação de senha
+            if (!validarSenha(req.body.senha)) return res.status(400).json({ msg: `A senha está no formato incorreto. A senha deve ter entre 6 e 14 caracteres, deve possuir uma letra maiúscula, deve possuir uma letra minúscula, um número e um símbolo.`, status: 'error' });
 
             // Criptografando a senha
             const senha = await criptografia.senhaCriptografada(req.body.senha);
