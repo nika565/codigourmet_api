@@ -53,8 +53,6 @@ class ReceitasController {
 
             const nomeReceita = req.query.nome;
 
-            console.log(nomeReceita);
-
             if (!nomeReceita) {
                 // Buscando algumas receitas aleatórias
                 const receitas = await ReceitasModel.find().sort({ createdAt: -1 }).limit(5).exec();
