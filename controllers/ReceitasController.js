@@ -24,11 +24,11 @@ class ReceitasController {
                 data: data
             }
 
-            if (!receita.nome) return res.status(400).json({msg: `Campo de nome não preenchido.`, status: `error`});
-            if (!receita.idCriador) return res.status(400).json({msg: `É preciso inserir o ID da pessoa que criou a receita`, status: `error`});
-            if (!receita.ingredientes) return res.status(400).json({msg: `Campo de ingredientes não preenchido.`, status: `error`});
-            if (!receita.modoPreparo) return res.status(400).json({msg: `Campo de modo de preparo não preenchido.`, status: `error`});
-            if (!receita.tempo) return res.status(400).json({msg: `Campo de tempo de preparo não preenchido.`, status: `error`});
+            if (!receita.nome) return res.status(400).json({ msg: `Campo de nome não preenchido.`, status: `error` });
+            if (!receita.idCriador) return res.status(400).json({ msg: `É preciso inserir o ID da pessoa que criou a receita`, status: `error` });
+            if (!receita.ingredientes) return res.status(400).json({ msg: `Campo de ingredientes não preenchido.`, status: `error` });
+            if (!receita.modoPreparo) return res.status(400).json({ msg: `Campo de modo de preparo não preenchido.`, status: `error` });
+            if (!receita.tempo) return res.status(400).json({ msg: `Campo de tempo de preparo não preenchido.`, status: `error` });
 
             // Inserindo no banco de dados
             const criarReceita = await ReceitasModel.create(receita);
@@ -46,19 +46,38 @@ class ReceitasController {
 
     }
 
-    // Buscar as últimas receitas publicadas 
+    // Pesquisar receitas
     async receitas(req, res) {
 
         try {
 
-            // Buscando até 10 das ultimas rceeitas inseridas
-            const receitas = await ReceitasModel.find().sort({ createdAt: -1 }).limit(5).exec();
+            const nomeReceita = req.query.nome;
 
-            if (receitas) {
-                return res.status(200).json({ msg: `OK`, status: `success`, dados: receitas });
+            console.log(nomeReceita);
+
+            if (!nomeReceita) {
+                // Buscando algumas receitas aleatórias
+                const receitas = await ReceitasModel.find().sort({ createdAt: -1 }).limit(5).exec();
+
+                if (receitas.length > 0) {
+                    return res.status(200).json({ msg: `OK`, status: `success`, dados: receitas });
+                }
+
+                return res.status(404).json({ msg: `Nenhuma receita encontrada.`, status: 'error' });
+            } else {
+
+                const receitas = await ReceitasModel.find({ nome: { $regex: new RegExp(nomeReceita, 'i') } });
+
+                console.log(receitas);
+
+                if (receitas.length > 0) {
+                    return res.status(200).json({ msg: `OK`, status: `success`, dados: receitas });
+                }
+
+                return res.status(404).json({ msg: `Nenhuma receita encontrada.`, status: 'error' });
+
+
             }
-
-            return res.status(404).json({ msg: `Nenhuma receita encontrada.`, status: 'error' });
 
         } catch (error) {
             console.log(error);
@@ -107,11 +126,11 @@ class ReceitasController {
                 tempo: req.body.tempo,
             }
 
-            if (!receita.nome) return res.status(400).json({msg: `Campo de nome não preenchido.`, status: `error`});
-            if (!receita.idCriador) return res.status(400).json({msg: `É preciso inserir o ID da pessoa que criou a receita`, status: `error`});
-            if (!receita.ingredientes) return res.status(400).json({msg: `Campo de ingredientes não preenchido.`, status: `error`});
-            if (!receita.modoPreparo) return res.status(400).json({msg: `Campo de modo de preparo não preenchido.`, status: `error`});
-            if (!receita.tempo) return res.status(400).json({msg: `Campo de tempo de preparo não preenchido.`, status: `error`});
+            if (!receita.nome) return res.status(400).json({ msg: `Campo de nome não preenchido.`, status: `error` });
+            if (!receita.idCriador) return res.status(400).json({ msg: `É preciso inserir o ID da pessoa que criou a receita`, status: `error` });
+            if (!receita.ingredientes) return res.status(400).json({ msg: `Campo de ingredientes não preenchido.`, status: `error` });
+            if (!receita.modoPreparo) return res.status(400).json({ msg: `Campo de modo de preparo não preenchido.`, status: `error` });
+            if (!receita.tempo) return res.status(400).json({ msg: `Campo de tempo de preparo não preenchido.`, status: `error` });
 
             const edicao = await ReceitasModel.findByIdAndUpdate(idReceita, receita);
 
