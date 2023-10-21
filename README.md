@@ -18,7 +18,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
 ### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/usuarios**
 
 - **Método suportados:** GET, POST, PUT e DELETE
-- **Parâmetros de consulta:** para usar os métodos GET, PUT, e DELETE é necessário passar o id do usuário para executar as respectivas operações de “Ler dados”, “Alterar dados” e “Excluir dados”. exemplo de URL: [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/usuarios/id**
+- **Parâmetros de consulta:** para usar os métodos GET, PUT, e DELETE é necessário passar o id do usuário para executar as respectivas operações de “Ler dados”, “Alterar dados” e “Excluir dados”. exemplo de URL: https://codigourmet-api.vercel.app/usuarios/id
 - **Exemplos de código:**
     - GET
         
@@ -28,7 +28,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
             try {
         
                 // Essa rota  de API é privada, portanto é necessário passar o token de autorização
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/usuarios/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/usuarios/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
                 const usuario = {nome, sobrenome, email, senha}
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/usuarios`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/usuarios`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -81,16 +81,17 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
     - PUT
         
         ```jsx
-        async function editar(nome, sobrenome){
+        async function editar(id, token, nome, sobrenome){
             
             try {
         
                 const usuario = {nome, sobrenome}
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/usuarios`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/usuarios${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
+                        'authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(usuario)
                 });
@@ -114,7 +115,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
             try {
         
-                const requisicao = await fetch(`${url}${endpointUsuarios}/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/usuarios/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -183,7 +184,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         ```
         
 
-### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/usuarios/login**
+### https://codigourmet-api.vercel.app/usuarios/login
 
 - **Métodos suportados:** POST.
 - **Parâmetros de consulta:** Nenhum.
@@ -200,7 +201,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
     
         try {
     
-            const requisicao = await fetch(`${url}/usuarios/login`, {
+            const requisicao = await fetch(`https://codigourmet-api.vercel.app/usuarios/login`, {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
@@ -243,10 +244,10 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         ```
         
 
-### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/receitas**
+### https://codigourmet-api.vercel.app/receitas
 
 - **Métodos suportados:** GET, POST, PUT e DELETE.
-- **Parâmetros de consulta:** para usar os métodos GET, PUT, e DELETE é necessário passar o id do evento para executar as respectivas operações de “Ler dados”, “Editar dados” e “Excluir dados”. exemplo de URL: [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/receitas/id**
+- **Parâmetros de consulta:** para usar os métodos GET, PUT, e DELETE é necessário passar o id do evento para executar as respectivas operações de “Ler dados”, “Editar dados” e “Excluir dados”. exemplo de URL: https://codigourmet-api.vercel.app/receitas/id
 - OBS: Para acessar essa rota é preciso estar autenticado.
 - **Exemplos de código:**
     - GET: (Essa requisição também aceita um parâmetro opcional na url para receber receitas com nome específico. Caso não tenha parâmetro  ela retorna algumas receitas aleatórias.)
@@ -256,7 +257,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
             try {
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas?nome=lasanha`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas?nome=lasanha`, {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
@@ -284,7 +285,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
             try {
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -314,7 +315,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         				// Objeto com os dados a serem mandados
                 const receita = {nome, idCriador, ingredientes, modoPreparo, tempo}
                 
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -345,7 +346,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
                 const receita = {nome, idCriador, ingredientes, modoPreparo, tempo}
                 
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -373,7 +374,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         async function excluirReceita(id, token) {
             try {
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -518,10 +519,10 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
 }
 ```
 
-### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas/receitasfavoritas/id
+### https://codigourmet-api.vercel.app/receitas/receitasfavoritas/id
 
 - **Métodos suportados:** GET, POST e PUT.
-- **Parâmetros de consulta:** para usar os métodos GET, POST, e PUT é necessário passar o id do evento para executar as respectivas operações de “Ler dados”, “Editar dados” e “Excluir dados”. exemplo de URL: [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/receitas/receitasfavoritas/id**
+- **Parâmetros de consulta:** para usar os métodos GET, POST, e PUT é necessário passar o id do evento para executar as respectivas operações de “Ler dados”, “Editar dados” e “Excluir dados”. exemplo de URL: https://codigourmet-api.vercel.app/receitas/receitasfavoritas/id
 - **Exemplos de código:**
     - GET
         
@@ -530,7 +531,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
             try {
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitasfavoritas/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/receitasfavoritas/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -560,7 +561,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         				// Objeto com os dados a serem mandados
                 const receita = {idReceita}
                 
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitasfavoritas/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/receitasfavoritas/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -592,7 +593,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         				// Objeto com os dados a serem mandados
                 const receitaId = {idReceita}
                 
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitasfavoritas/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/receitasfavoritas/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -663,17 +664,17 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
     
 
-### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas/apagartudo/id
+### https://codigourmet-api.vercel.app/receitas/apagartudo/id
 
 - **Métodos suportados:** DELETE
-- **Parâmetros de consulta:** Essa rota é apenas para deletar todas as receitas do usuário”. exemplo de URL: [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/receitas/apagartudo/id**
+- **Parâmetros de consulta:** Essa rota é apenas para deletar todas as receitas do usuário”. exemplo de URL: https://codigourmet-api.vercel.app/receitas/apagartudo/id
 - **Exemplo de código:**
     
     ```jsx
     async function excluirTodasReceitas(id, token) {
         try {
     
-            const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/apagartudo/${id}`, {
+            const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/apagartudo/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -703,10 +704,10 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
     ```
     
 
-### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/receitas/minhasreceitas/id
+### https://codigourmet-api.vercel.app/receitas/minhasreceitas/id
 
 - **Métodos suportados:** GET
-- **Parâmetros de consulta:** Essa rota é apenas para buscar todas as receitas do usuário”. exemplo de URL: [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/receitas/minhasreceitas/id**
+- **Parâmetros de consulta:** Essa rota é apenas para buscar todas as receitas do usuário”. exemplo de URL: https://codigourmet-api.vercel.app/receitas/minhasreceitas/id
 - **Exemplo de código:**
     
     ```jsx
@@ -714,7 +715,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
     
         try {
     
-            const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/minhasreceitas/${id}`, {
+            const requisicao = await fetch(`https://codigourmet-api.vercel.app/receitas/minhasreceitas/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -787,10 +788,10 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
     ```
     
 
-### [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/recuperarsenha
+### https://codigourmet-api.vercel.app/recuperarsenha
 
 - **Métodos suportados:** POST e PATCH.
-- **Parâmetros de consulta:** Essa rota serve para enviar o e-mail de recuperação de senha e também recuperar a senha. exemplo de URL: [https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)**/receitas/recuperarsenha.**
+- **Parâmetros de consulta:** Essa rota serve para enviar o e-mail de recuperação de senha e também recuperar a senha. exemplo de URL: https://codigourmet-api.vercel.app/recuperarsenha.**
 - **Exemplos de código:**
     - POST
         
@@ -799,7 +800,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
             try {
         
-                const requisicao = await fetch(`[https://codigourmet-api.vercel.app](https://codigourmet-api.vercel.app/)/recuperarsenha`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/recuperarsenha`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -827,7 +828,7 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
         
             try {
         
-                const requisicao = await fetch(`${url}${endpointSenha}/${id}`, {
+                const requisicao = await fetch(`https://codigourmet-api.vercel.app/recuperarsenha/${id}`, {
                     method: "PATCH",
                     headers: {
                         'Content-Type': 'application/json'
