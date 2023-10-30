@@ -719,11 +719,11 @@ A API "CódiGourmet" foi desenvolvida com a simplicidade e flexibilidade em ment
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'authorization': `Bearer ${token}`
                 }
             });
     
-            const resposta = requisicao.json();
+            const resposta = await requisicao.json();
     
             return resposta;
             
